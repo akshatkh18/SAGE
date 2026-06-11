@@ -3,7 +3,6 @@ import pandas as pd
 import numpy as np
 
 def profile_dataframe(df: pd.DataFrame)->Dict:
-    # pass
     profile={}
 
     profile["n_rows"]=df.shape[0]
