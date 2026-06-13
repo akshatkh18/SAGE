@@ -30,8 +30,8 @@ def profile_dataframe(df: pd.DataFrame)->Dict:
             stats['min']= clean.min()
             stats['max']= clean.max()
 
-            q1=clean.quartile(0.25)
-            q3=clean.quartile(0.75)
+            q1=clean.quantile(0.25)
+            q3=clean.quantile(0.75)
             iqr=q3-q1
             lower=q1-1.5*iqr
             upper=q3+1.5*iqr
