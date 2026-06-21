@@ -1,6 +1,36 @@
+# Virtual environment
 venv/
+
+# Python cache
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+
+# Package metadata
+*.egg-info/
+dist/
+build/
+
+# Logs
+logs/
+
+# Artifacts (model outputs, saved files)
+artifacts/
+
+# Data files (never push raw data to GitHub)
 *.xlsx
 *.csv
+*.json
+*.parquet
+
+# Environment variables
 .env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
