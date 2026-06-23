@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 
 from app.eda.profiler import profile_dataframe
 from app.eda.insights import generate_insights, summarize_by_severity
+from app.eda.profiler import profile_dataframe
 from app.utils.logger import logger
 from app.utils.exceptions import DataLoadError, ProfilingError, InsightGenerationError
 
@@ -227,14 +228,25 @@ def main():
     if page == "EDA":
         with st.spinner("Running EDA pipeline..."):
             render_eda(df)
+
     elif page == "Preprocessing":
-        render_placeholder("Preprocessing")
+        if "df" not in st.session_state:
+            st.warning("Please upload a dataset first from the EDA page.")
+        else:
+            from app.pages.preprocessing_page import render_preprocessing
+            with st.spinner("Preparing preprocessing module..."):
+                profile = profile_dataframe(st.session_state["df"])
+            render_preprocessing(st.session_state["df"], profile)
+
     elif page == "Model Arena":
         render_placeholder("Model Arena")
+
     elif page == "Explainability":
         render_placeholder("Explainability")
+
     elif page == "Experiments":
         render_placeholder("Experiments")
+
     elif page == "Report":
         render_placeholder("Report")
 

@@ -21,7 +21,7 @@ def profile_dataframe(df: pd.DataFrame) -> dict:
                 series = df[col]
                 stats = {
                     "name": col,
-                    "dtype": str(series.dtype),
+                    "dtype": str(series.dtype) if str(series.dtype) != "str" else "object",
                     "missing": series.isnull().sum(),
                     "missing_pct": round(series.isnull().mean() * 100, 2),
                     "unique": series.nunique(),
