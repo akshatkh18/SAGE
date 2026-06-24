@@ -250,7 +250,11 @@ def main():
             )
 
     elif page == "Explainability":
-        render_placeholder("Explainability")
+        if "arena_result" not in st.session_state:
+            st.warning("Please run Model Arena first.")
+        else:
+            from app.pages.explainability_page import render_explainability
+            render_explainability(st.session_state["arena_result"])
 
     elif page == "Experiments":
         render_placeholder("Experiments")
