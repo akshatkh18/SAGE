@@ -239,7 +239,15 @@ def main():
             render_preprocessing(st.session_state["df"], profile)
 
     elif page == "Model Arena":
-        render_placeholder("Model Arena")
+        if "df_processed" not in st.session_state:
+            st.warning("Please run Preprocessing first.")
+        else:
+            from app.pages.model_arena_page import render_model_arena
+            render_model_arena(
+                df_processed=st.session_state["df_processed"],
+                target_column=st.session_state["target_column"],
+                feature_names=st.session_state["feature_names"]
+            )
 
     elif page == "Explainability":
         render_placeholder("Explainability")
