@@ -257,10 +257,37 @@ def main():
             render_explainability(st.session_state["arena_result"])
 
     elif page == "Experiments":
-        render_placeholder("Experiments")
+        if "arena_result" not in st.session_state:
+            st.warning("Please run Model Arena first.")
+        else:
+            from app.pages.experiments_page import render_experiments
+            render_experiments(
+                arena_result=st.session_state["arena_result"],
+                preprocessing_result={
+                    "dropped_columns": st.session_state.get("dropped_columns", []),
+                    "preprocessing_report": st.session_state.get("preprocessing_report", [])
+                },
+                dataset_name=st.session_state.get("filename", "unknown")
+            )
 
     elif page == "Report":
-        render_placeholder("Report")
+        if "arena_result" not in st.session_state:
+            st.warning("Please run Model Arena first.")
+        else:
+            from app.pages.report_page import render_report
+            from app.eda.profiler import profile_dataframe as _profile_dataframe
+            with st.spinner("Preparing report module..."):
+                profile = _profile_dataframe(st.session_state["df"])
+            render_report(
+                profile=profile,
+                arena_result=st.session_state["arena_result"],
+                preprocessing_result={
+                    "preprocessing_report": st.session_state.get("preprocessing_report", []),
+                    "dropped_columns": st.session_state.get("dropped_columns", [])
+                },
+                dataset_name=st.session_state.get("filename", "unknown"),
+                target_column=st.session_state.get("target_column", "unknown")
+            )
 
 
 if __name__ == "__main__":
