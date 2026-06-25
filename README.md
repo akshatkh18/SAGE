@@ -1,15 +1,14 @@
 # SAGE
 
 <p align="center">
-  <h1 align="center">SAGE</h1>
-  <h3 align="center">Smart Adaptive Guided Experimentation</h3>
+  <h1 align="center">Smart Adaptive Guided Experimentation</h1>
 
   <p align="center">
     An Explainable AutoML Platform that automates the complete Machine Learning workflow while keeping every decision transparent.
   </p>
 
   <p align="center">
-    <a href="https://huggingface.co/spaces/akshatkh18/SAGE"><strong>Live Demo</strong></a>
+    <a href="https://huggingface.co/spaces/akshat18/SAGE"><strong>Live Demo</strong></a>
     ·
     <a href="https://github.com/akshatkh18/SAGE/issues">Report Bug</a>
     ·
