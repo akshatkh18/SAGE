@@ -1,0 +1,15 @@
+streamlit==1.45.1
+pandas
+numpy
+matplotlib
+seaborn
+scikit-learn
+xgboost
+lightgbm
+optuna
+shap
+reportlab
+openpyxl
+scipy
+joblib
+
