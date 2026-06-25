@@ -76,25 +76,6 @@ Winner gets Optuna hyperparameter tuning (10–50 trials, auto-scaled to dataset
 - **Reports:** ReportLab
 - **Logging:** Python logging (daily rotating log files)
 
-- ---
-
-## 📸 Screenshots
-
-### EDA — Automated Insights
-<!-- Add screenshot here -->
-![EDA](assets/eda.png)
-
-### Model Arena
-<!-- Add screenshot here -->
-![MODEL ARENA](assets/model_arena.png)
-
-### Model Arena — Leaderboard
-<!-- Add screenshot here -->
-![MODEL ARENA LEADERBOARD](assets/leaderboard_arena.png)
-
-### PDF Report
-<!-- Add screenshot here -->
-![Report](assets/report_gen.png)
 
 ---
 
