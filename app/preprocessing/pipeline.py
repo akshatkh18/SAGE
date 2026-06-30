@@ -172,7 +172,14 @@ def run_preprocessing(df: pd.DataFrame, profile: dict, target_column: str, high_
 
         remaining_nulls=df.isnull().sum().sum()
         if remaining_nulls>0:
-            logger.warning(f"Preprocessing complete but {remaining_nulls} nulls remain.")
+            logger.warning(f"Preprocessing complete but {remaining_nulls} nulls remain. Applying fallback imputation.")
+            for col in df.columns:
+                if df[col].isnull().any():
+                    if pd.api.types.is_numeric_dtype(df[col]):
+                        df[col].fillna(df[col].median(), inplace=True)
+                    else:
+                        df[col].fillna(df[col].mode()[0] if not df[col].mode().empty else "Unknown", inplace=True)
+            logger.info("Fallback imputation applied.")
         else:
             logger.info("Preprocessing complete — no nulls remaining.")
 

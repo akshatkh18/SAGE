@@ -30,10 +30,10 @@ with st.sidebar:
     st.caption("Smart Adaptive Guided Experimentation")
     st.markdown("### Navigation")
     page = st.radio(
-        "Navigation",
-        ["EDA", "Preprocessing", "Model Arena", "Explainability", "Experiments", "Report"],
-        label_visibility="collapsed"
-    )
+    "Navigation",
+    ["EDA", "Preprocessing", "Model Arena", "Explainability", "Prediction", "Experiments", "Report"],
+    label_visibility="collapsed"
+)
     st.markdown("---")
     st.caption("v1.0.0 | Zero-cost ML Co-pilot")
 
@@ -255,6 +255,16 @@ def main():
         else:
             from app.pages.explainability_page import render_explainability
             render_explainability(st.session_state["arena_result"])
+
+    elif page == "Prediction":
+        if "arena_result" not in st.session_state:
+            st.warning("Please run Model Arena first.")
+        else:
+            from app.pages.prediction_page import render_prediction
+            render_prediction(
+                arena_result=st.session_state["arena_result"],
+                df_processed=st.session_state["df_processed"]
+            )
 
     elif page == "Experiments":
         if "arena_result" not in st.session_state:

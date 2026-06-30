@@ -205,8 +205,33 @@ def run_model_arena(
     try:
         logger.info(f"Model Arena started  | target='{target_column}' | trials={n_trials}")
 
-        X=df_processed[feature_names]
-        y=df_processed[target_column]
+        X = df_processed[feature_names].copy()
+        y = df_processed[target_column].copy()
+
+        # Clean y first — drop rows where target is missing
+        if y.isnull().any():
+            valid_idx = y.notnull()
+            X = X[valid_idx].reset_index(drop=True)
+            y = y[valid_idx].reset_index(drop=True)
+            logger.warning(f"Dropped {(~valid_idx).sum()} rows with missing target values.")
+
+        # Clean X — handle NaN and inf
+        for col in X.columns:
+            if pd.api.types.is_numeric_dtype(X[col]):
+                X[col] = X[col].replace([np.inf, -np.inf], np.nan)
+                median_val = X[col].median()
+                if pd.isnull(median_val):
+                    median_val = 0
+                X[col] = X[col].fillna(median_val)
+            else:
+                X[col] = X[col].fillna("Unknown")
+
+        # Final hard check
+        remaining_nan = X.isnull().sum().sum()
+        if remaining_nan > 0:
+            bad_cols = X.isnull().sum()[X.isnull().sum() > 0].to_dict()
+            logger.error(f"Still {remaining_nan} NaNs after cleaning: {bad_cols}")
+            raise ModelTrainingError(f"Could not clean all NaN values in features: {bad_cols}")
 
         task = detect_task(y)
         logger.info(f"Task detected: {task}")
