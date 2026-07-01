@@ -144,7 +144,7 @@ def render_model_arena(df_processed: pd.DataFrame, target_column: str, feature_n
                 st.pyplot(fig)
                 plt.close()
 
-            st.info(f"Model saved to `{arena_result['model_path']}`. Head to **Explainability** for SHAP analysis.")
+            st.success("Training complete. Head to **Explainability** for SHAP analysis.")
             logger.info(f"Model Arena UI complete | best={arena_result['best_model_name']}")
 
         except ModelTrainingError as e:

@@ -20,13 +20,16 @@ from app.utils.exceptions import DataLoadError, ProfilingError, InsightGeneratio
 
 st.set_page_config(
     page_title="SAGE",
-    page_icon="💕",
+    page_icon=":material/psychology:",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
+from app.utils.styles import inject_custom_css
+inject_custom_css()
 with st.sidebar:
-    st.title("💕SAGE💕")
+    st.markdown('<span class="sage-eyebrow">ML Co-pilot</span>', unsafe_allow_html=True)
+    st.title("SAGE")
     st.caption("Smart Adaptive Guided Experimentation")
     st.markdown("### Navigation")
     page = st.radio(
@@ -34,8 +37,6 @@ with st.sidebar:
     ["EDA", "Preprocessing", "Model Arena", "Explainability", "Prediction", "Experiments", "Report"],
     label_visibility="collapsed"
 )
-    st.markdown("---")
-    st.caption("v1.0.0 | Zero-cost ML Co-pilot")
 
 def load_data(uploaded_file)->pd.DataFrame:
     try:
@@ -67,7 +68,7 @@ def load_data(uploaded_file)->pd.DataFrame:
         
 
 def render_eda(df:pd.DataFrame):
-    st.header("Exploratorary Data Analysis")
+    st.header("Exploratory Data Analysis")
 
     st.subheader("Dataset Overview")
     col1, col2, col3, col4=st.columns(4)
@@ -116,9 +117,9 @@ def render_eda(df:pd.DataFrame):
             return
 
     severity_config = {
-        "critical": ("🔴 Critical", "error"),
-        "warning": ("🟡 Warning", "warning"),
-        "info": ("🔵 Info", "info"),
+        "critical": ("Critical", "error"),
+        "warning": ("Warning", "warning"),
+        "info": ("Info", "info"),
     }
 
     for severity, (label, box_type) in severity_config.items():
@@ -191,14 +192,15 @@ def render_placeholder(name: str):
     st.info(f"{name} module is coming soon. Currently building Week 1 (EDA).")
 
 def main():
-    st.markdown("<h1 style='text-align:center'>🧠 SAGE</h1>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align:center; color:gray'>Smart Adaptive Guided Experimentation — Your ML Co-pilot</p>", unsafe_allow_html=True)
+    st.markdown('<span class="sage-eyebrow">Smart Adaptive Guided Experimentation</span>', unsafe_allow_html=True)
+    st.markdown("<h1>SAGE</h1>", unsafe_allow_html=True)
+    st.markdown("<p style='color:#5c574d; font-size:1.05rem; margin-top:-0.5rem;'>Your end-to-end machine learning co-pilot.</p>", unsafe_allow_html=True)
     st.markdown("---")
 
     uploaded_file = st.file_uploader("Upload your dataset (CSV or Excel)", type=["csv", "xlsx", "xls"])
 
     if uploaded_file is not None:
-        st.toast("File received. Processing...", icon="📂")
+        st.toast("File received. Processing...")
 
     if uploaded_file is None:
         st.markdown("""
@@ -233,7 +235,7 @@ def main():
         if "df" not in st.session_state:
             st.warning("Please upload a dataset first from the EDA page.")
         else:
-            from app.pages.preprocessing_page import render_preprocessing
+            from app.views.preprocessing_page import render_preprocessing
             with st.spinner("Preparing preprocessing module..."):
                 profile = profile_dataframe(st.session_state["df"])
             render_preprocessing(st.session_state["df"], profile)
@@ -242,7 +244,7 @@ def main():
         if "df_processed" not in st.session_state:
             st.warning("Please run Preprocessing first.")
         else:
-            from app.pages.model_arena_page import render_model_arena
+            from app.views.model_arena_page import render_model_arena
             render_model_arena(
                 df_processed=st.session_state["df_processed"],
                 target_column=st.session_state["target_column"],
@@ -253,14 +255,14 @@ def main():
         if "arena_result" not in st.session_state:
             st.warning("Please run Model Arena first.")
         else:
-            from app.pages.explainability_page import render_explainability
+            from app.views.explainability_page import render_explainability
             render_explainability(st.session_state["arena_result"])
 
     elif page == "Prediction":
         if "arena_result" not in st.session_state:
             st.warning("Please run Model Arena first.")
         else:
-            from app.pages.prediction_page import render_prediction
+            from app.views.prediction_page import render_prediction
             render_prediction(
                 arena_result=st.session_state["arena_result"],
                 df_processed=st.session_state["df_processed"]
@@ -270,7 +272,7 @@ def main():
         if "arena_result" not in st.session_state:
             st.warning("Please run Model Arena first.")
         else:
-            from app.pages.experiments_page import render_experiments
+            from app.views.experiments_page import render_experiments
             render_experiments(
                 arena_result=st.session_state["arena_result"],
                 preprocessing_result={
@@ -284,7 +286,7 @@ def main():
         if "arena_result" not in st.session_state:
             st.warning("Please run Model Arena first.")
         else:
-            from app.pages.report_page import render_report
+            from app.views.report_page import render_report
             from app.eda.profiler import profile_dataframe as _profile_dataframe
             with st.spinner("Preparing report module..."):
                 profile = _profile_dataframe(st.session_state["df"])
