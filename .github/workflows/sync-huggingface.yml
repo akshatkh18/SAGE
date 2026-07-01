@@ -13,21 +13,25 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Sync to Hugging Face Space
+      - name: Clone Hugging Face Space
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN_SYNC }}
         run: |
-          git config --global user.email "github-actions@github.com"
-          git config --global user.name "GitHub Actions"
+          git clone https://akshat18:$HF_TOKEN@huggingface.co/spaces/akshat18/SAGE /tmp/hf-space
 
-          git clone https://akshat18:$HF_TOKEN@huggingface.co/spaces/akshat18/SAGE hf-space
-
+      - name: Copy project files
+        run: |
           rsync -av --delete \
             --exclude ".git" \
             --exclude ".github" \
-            ./ hf-space/
+            ./ /tmp/hf-space/
 
-          cd hf-space
+      - name: Push to Hugging Face
+        run: |
+          cd /tmp/hf-space
+
+          git config user.name "GitHub Actions"
+          git config user.email "github-actions@github.com"
 
           git add .
 
@@ -36,6 +40,5 @@ jobs:
             exit 0
           fi
 
-          git commit -m "Auto sync from GitHub"
-
+          git commit -m "Sync from GitHub"
           git push
